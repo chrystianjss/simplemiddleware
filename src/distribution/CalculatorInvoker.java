@@ -3,37 +3,17 @@ package distribution;
 import infrastructure.ServerRequestHandler;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
 
-import org.apache.commons.pool2.impl.GenericObjectPool;
-
-import distribution.pooling.CalculatorImplPool;
-import distribution.pooling.CalculatorImplPooledFactory;
+import distribution.pooling.CalculatorPool;
 
 public class CalculatorInvoker {
 
-	private CalculatorImplPool calculatorImplPool = null;
-	private static final int TAM_MAX_POOL = 3;
-	private static final int TEMPO_MAX_PARA_BUSCAR_NOVO_OBJETO = 3000; // Neste caso, 3 segundos
-
-	// Método construtor
-	public CalculatorInvoker() throws NoSuchElementException, IOException {
-		// Cria o Pool de objetos CalculatorImpl
-		List<CalculatorImpl> calculatorImplList = new ArrayList<CalculatorImpl>();
-		GenericObjectPool<CalculatorImpl> genericObjectPool = new GenericObjectPool<CalculatorImpl>(new CalculatorImplPooledFactory());
-		genericObjectPool.setMaxTotal(TAM_MAX_POOL);
-		genericObjectPool.setMaxWaitMillis(TEMPO_MAX_PARA_BUSCAR_NOVO_OBJETO);
-		this.calculatorImplPool = new CalculatorImplPool(genericObjectPool);
-
-		// Ajusta quantidade inicial de objetos no Pool
-		for (int i = 0; i < TAM_MAX_POOL; i++) {
-			calculatorImplList.add(this.calculatorImplPool.getObjeto());
-		}
-		for (CalculatorImpl c: calculatorImplList) {
-			this.calculatorImplPool.retornaObjeto(c);
-		}
+	private CalculatorPool calculatorImplPool;
+	private static final int TAM_POOL = 3;
+	
+	public CalculatorInvoker() {
+		// Cria o pool de objetos de CalculatorImpl
+		calculatorImplPool = new CalculatorPool(TAM_POOL);
 	}
 
 	public void invoke(ClientProxy clientProxy) throws IOException, Throwable {
@@ -44,17 +24,17 @@ public class CalculatorInvoker {
 		Marshaller mrsh = new Marshaller();
 		Termination ter = new Termination();
 
-		// Create remote object
-		CalculatorImpl rObj = this.calculatorImplPool.getObjeto();
-
 		// Inversion loop
 		while (true) {
 
 			// @ Receive Message
 			msgToBeUnmarshalled = srh.receive();
-
+			
 			// @ Unmarshall received message
 			msgUnmarshalled = mrsh.unmarshall(msgToBeUnmarshalled);
+			
+			// Obtém o Objeto Remoto
+			CalculatorImpl rObj = this.calculatorImplPool.obterObjeto();
 			
 			switch (msgUnmarshalled.getBody().getRequestHeader().getOperation()) {
 
@@ -131,7 +111,7 @@ public class CalculatorInvoker {
 					break;
 			}
 			
-			this.calculatorImplPool.retornaObjeto(rObj);
+			this.calculatorImplPool.retornarObjeto(rObj);
 		}
 	}
 }
