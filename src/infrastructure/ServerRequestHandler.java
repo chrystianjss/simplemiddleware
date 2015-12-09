@@ -16,15 +16,15 @@ public class ServerRequestHandler {
 	private DataOutputStream outToClient = null;
 	private DataInputStream inFromClient = null;
 
-	public ServerRequestHandler(int port) {
+	public ServerRequestHandler(int port) throws IOException {
 		this.portNumber = port;
+		welcomeSocket = new ServerSocket(portNumber);
 	}
 
 	public byte [] receive() throws IOException, Throwable {
 
 		byte [] rcvMsg = null;
 		
-		welcomeSocket = new ServerSocket(portNumber);
 		connectionSocket = welcomeSocket.accept();
 
 		outToClient = new DataOutputStream(connectionSocket.getOutputStream());
@@ -45,10 +45,10 @@ public class ServerRequestHandler {
 		outToClient.write(msg);
 		outToClient.flush();
 
-		connectionSocket.close();
-		welcomeSocket.close();
-		outToClient.close();
-		inFromClient.close();
+//		connectionSocket.close();
+//		welcomeSocket.close();
+//		outToClient.close();
+//		inFromClient.close();
 
 		return;
 	}
