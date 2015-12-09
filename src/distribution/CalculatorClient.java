@@ -18,7 +18,11 @@ public class CalculatorClient {
          
         // look for Calculator in Naming service
         CalculatorProxy calculatorProxy = (CalculatorProxy) namingService
-                .lookup("Calculator");
+                .lookup("Calculator1");
+
+        //Gera ObjectId - Chrystian
+      	Integer id = (int) (Math.random() * 100);
+      	calculatorProxy.setObjectId(id);
  
         // invoke calculator
         //calculatorProxy.add(1, 3);

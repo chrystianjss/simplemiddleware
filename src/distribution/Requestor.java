@@ -18,7 +18,8 @@ public class Requestor {
 		Message msgUnmarshalled = new Message(); // TODO actual marshalling
 
 		// map Invocation into a Message
-		RequestHeader requestHeader = new RequestHeader("", 0, true, 0,
+		// Chrystian
+				RequestHeader requestHeader = new RequestHeader("", 0, true, inv.getClientProxy().objectId,
 				inv.getOperationName());
 		RequestBody requestBody = new RequestBody(inv.getParameters());
 		MessageHeader messageHeader = new MessageHeader("MIOP", 0, false, 0, 0);
