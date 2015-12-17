@@ -1,6 +1,8 @@
 package distribution.pooling;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
+
+import utilsconf.UtilsConf;
 import distribution.pooling.exception.TamanhoPoolException;
 
 public abstract class ObjectPool<T> {
@@ -27,7 +29,7 @@ public abstract class ObjectPool<T> {
 		T objeto;
 		
 		if ((objeto = pool.poll()) == null) {
-			throw new TamanhoPoolException("Não há mais elementos presentes no pool.");
+			throw new TamanhoPoolException(UtilsConf.MSG_ERRO_POOL);
 		} else {
 			return objeto;
 		}

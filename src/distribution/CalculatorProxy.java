@@ -3,9 +3,10 @@ package distribution;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+
 import utilsconf.UtilsConf;
 
-public class CalculatorProxy extends ClientProxy implements ICalculator {
+public class CalculatorProxy extends ClientProxy implements ICalculator{
 
 	private static final long serialVersionUID = 1L;
 
@@ -45,7 +46,12 @@ public class CalculatorProxy extends ClientProxy implements ICalculator {
 		ter = requestor.invoke(inv);
 
 		// @ Result sent back to Client
-		return (Float) ter.getResult();
+
+		try {
+			return (Float) ter.getResult();
+		} catch(Exception e) {
+			throw new Exception(UtilsConf.MSG_ERRO_POOL);
+		}
 	}
 
 	public float sub(float x, float y) throws Throwable {
@@ -71,8 +77,13 @@ public class CalculatorProxy extends ClientProxy implements ICalculator {
 		// invoke Requestor
 		ter = requestor.invoke(inv);
 
-		// @ Result sent back to Client
-		return (Float) ter.getResult();
+		try {
+			// @ Result sent back to Client
+			return (Float) ter.getResult();
+		} catch(Exception e) {
+			throw new Exception(UtilsConf.MSG_ERRO_POOL);
+		}
+
 	}
 
 	public float mul(float x, float y) throws Throwable {
@@ -97,9 +108,12 @@ public class CalculatorProxy extends ClientProxy implements ICalculator {
 
 		// invoke Requestor
 		ter = requestor.invoke(inv);
-
-		// @ Result sent back to Client
-		return (Float) ter.getResult();
+		try {
+			// @ Result sent back to Client
+			return (Float) ter.getResult();
+		} catch(Exception e) {
+			throw new Exception(UtilsConf.MSG_ERRO_POOL);
+		}
 	}
 
 	public float div(float x, float y) throws Throwable {
@@ -125,7 +139,11 @@ public class CalculatorProxy extends ClientProxy implements ICalculator {
 		// invoke Requestor
 		ter = requestor.invoke(inv);
 
-		// @ Result sent back to Client
-		return (Float) ter.getResult();
+		try {
+			// @ Result sent back to Client
+			return (Float) ter.getResult();
+		} catch(Exception e) {
+			throw new Exception(UtilsConf.MSG_ERRO_POOL);
+		}	
 	}
 }
