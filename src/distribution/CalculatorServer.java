@@ -21,7 +21,9 @@ public class CalculatorServer {
         namingService.bind("Calculator1", calculator);
  
         // register calculator in Naming service
-        namingService.bind("Calculator2", calculator);
+        //namingService.bind("Calculator2", calculator);
+        
+        System.out.println("Server running...");
          
         // invoke Invoker
         invoker.invoke(calculator);

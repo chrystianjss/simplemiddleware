@@ -46,11 +46,21 @@ public class CalculatorProxy extends ClientProxy implements ICalculator{
 		ter = requestor.invoke(inv);
 
 		// @ Result sent back to Client
-
-		try {
+		if (ter.getCodeResult() == UtilsConf.COD_SUCESSO) {
 			return (Float) ter.getResult();
-		} catch(Exception e) {
-			throw new Exception(UtilsConf.MSG_ERRO_POOL);
+		} else {
+			String msgErro = "";
+			
+			switch (ter.getCodeResult()) {
+			
+			case UtilsConf.COD_ERRO_POOL:
+				msgErro = UtilsConf.MSG_ERRO_POOL;
+				break;
+				
+			default:
+				break;
+			}
+			throw new Exception(msgErro);
 		}
 	}
 
@@ -77,13 +87,23 @@ public class CalculatorProxy extends ClientProxy implements ICalculator{
 		// invoke Requestor
 		ter = requestor.invoke(inv);
 
-		try {
-			// @ Result sent back to Client
+		// @ Result sent back to Client
+		if (ter.getCodeResult() == UtilsConf.COD_SUCESSO) {
 			return (Float) ter.getResult();
-		} catch(Exception e) {
-			throw new Exception(UtilsConf.MSG_ERRO_POOL);
-		}
+		} else {
+			String msgErro = "";
 
+			switch (ter.getCodeResult()) {
+
+			case UtilsConf.COD_ERRO_POOL:
+				msgErro = UtilsConf.MSG_ERRO_POOL;
+				break;
+
+			default:
+				break;
+			}
+			throw new Exception(msgErro);
+		}
 	}
 
 	public float mul(float x, float y) throws Throwable {
@@ -108,11 +128,23 @@ public class CalculatorProxy extends ClientProxy implements ICalculator{
 
 		// invoke Requestor
 		ter = requestor.invoke(inv);
-		try {
-			// @ Result sent back to Client
+		
+		// @ Result sent back to Client
+		if (ter.getCodeResult() == UtilsConf.COD_SUCESSO) {
 			return (Float) ter.getResult();
-		} catch(Exception e) {
-			throw new Exception(UtilsConf.MSG_ERRO_POOL);
+		} else {
+			String msgErro = "";
+
+			switch (ter.getCodeResult()) {
+
+			case UtilsConf.COD_ERRO_POOL:
+				msgErro = UtilsConf.MSG_ERRO_POOL;
+				break;
+
+			default:
+				break;
+			}
+			throw new Exception(msgErro);
 		}
 	}
 
@@ -139,11 +171,22 @@ public class CalculatorProxy extends ClientProxy implements ICalculator{
 		// invoke Requestor
 		ter = requestor.invoke(inv);
 
-		try {
-			// @ Result sent back to Client
+		// @ Result sent back to Client
+		if (ter.getCodeResult() == UtilsConf.COD_SUCESSO) {
 			return (Float) ter.getResult();
-		} catch(Exception e) {
-			throw new Exception(UtilsConf.MSG_ERRO_POOL);
+		} else {
+			String msgErro = "";
+
+			switch (ter.getCodeResult()) {
+
+			case UtilsConf.COD_ERRO_POOL:
+				msgErro = UtilsConf.MSG_ERRO_POOL;
+				break;
+
+			default:
+				break;
+			}
+			throw new Exception(msgErro);
 		}	
 	}
 }

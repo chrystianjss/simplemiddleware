@@ -18,14 +18,15 @@ public class CalculatorClient {
 
 		// look for Calculator in Naming service
 		CalculatorProxy calculatorProxy = (CalculatorProxy) namingService
-				.lookup("Calculator");
+				.lookup("Calculator1");
 
 		// invoke calculator
 		//calculatorProxy.add(1, 3);
+		System.out.println("Esperando resposta...");
 		try {
-			System.out.println("Resultado da operação: "+calculatorProxy.add(1, 3));
+			System.out.println("Resultado da operação: " + calculatorProxy.add(1, 3));
 		} catch(Exception e) {
-			System.out.println(e.getMessage());
+			System.err.println(e.getMessage());
 		}
 	}
 }

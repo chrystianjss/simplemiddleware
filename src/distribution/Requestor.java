@@ -39,6 +39,7 @@ public class Requestor {
 		msgUnmarshalled = (Message) marshaller.unmarshall(msgToBeUnmarshalled);
 
 		// return result to Client Proxy
+		termination.setCodeResult(msgUnmarshalled.getHeader().getMessageType());
 		termination.setResult(msgUnmarshalled.getBody().getReplyBody()
 				.getOperationResult());
 

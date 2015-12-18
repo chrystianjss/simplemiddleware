@@ -33,13 +33,18 @@ public class CalculatorInvoker {
 
 			// @ Unmarshall received message
 			msgUnmarshalled = mrsh.unmarshall(msgToBeUnmarshalled);
-
-			CalculatorImpl rObj = this.calculatorImplPool.obterObjeto();
+			
+			CalculatorImpl rObj = null;
 			boolean encontrou = false;
 			int qtdTentativas = 0;
-			
+			long tempoTentativa = 2000L;
 			while (!encontrou) {
-				try{
+				try {
+					// Dados para teste
+					//CalculatorImpl rObj1 = this.calculatorImplPool.obterObjeto();
+					//CalculatorImpl rObj2 = this.calculatorImplPool.obterObjeto();
+					//CalculatorImpl rObj3 = this.calculatorImplPool.obterObjeto();
+					
 					// Obtém o Objeto Remoto
 					rObj = this.calculatorImplPool.obterObjeto();
 					encontrou = true;
@@ -48,23 +53,23 @@ public class CalculatorInvoker {
 					if (qtdTentativas == UtilsConf.QTD_MAX_TENTATIVAS){
 						encontrou = true;
 					}
-					Thread.sleep(2000L); // 2 segundos para realizar a nova tentativa					
+					
+					tempoTentativa = tempoTentativa * qtdTentativas; 
+					Thread.sleep(tempoTentativa);					
 				}
 			}
 
-			if(qtdTentativas == UtilsConf.QTD_MAX_TENTATIVAS){
-				Message _add_msgToBeMarshalled = new Message(
-						new MessageHeader("protocolo", 0, false, 0, 0), 
-						new MessageBody(null, null, new ReplyHeader("", 0, 0), 
-								new ReplyBody(UtilsConf.MSG_ERRO_POOL)));
-
-				// @ Marshall the response
+			if(qtdTentativas == UtilsConf.QTD_MAX_TENTATIVAS) {
+				MessageHeader messageHeader = new MessageHeader("protocolo", 0, false, UtilsConf.COD_ERRO_POOL, 0); 
+				MessageBody messageBody = new MessageBody(null, null, 
+						new ReplyHeader("", 0, 0), 
+						new ReplyBody(UtilsConf.MSG_ERRO_POOL));
+				
+				Message _add_msgToBeMarshalled = new Message(messageHeader, messageBody);
 				msgMarshalled = mrsh.marshall(_add_msgToBeMarshalled);
-
-				// @ Send response
 				srh.send(msgMarshalled);
 			} else {
-
+				
 				switch (msgUnmarshalled.getBody().getRequestHeader().getOperation()) {
 
 				case "add":
@@ -74,7 +79,7 @@ public class CalculatorInvoker {
 					ter.setResult(rObj.add(_add_p1, _add_p2));
 
 					Message _add_msgToBeMarshalled = new Message(
-							new MessageHeader("protocolo", 0, false, 0, 0), 
+							new MessageHeader("protocolo", 0, false, UtilsConf.COD_SUCESSO, 0), 
 							new MessageBody(null, null, new ReplyHeader("", 0, 0), 
 									new ReplyBody(ter.getResult())));
 
@@ -92,7 +97,7 @@ public class CalculatorInvoker {
 					ter.setResult(rObj.sub(_sub_p1, _sub_p2));
 
 					Message msgToBeMarshalled = new Message(
-							new MessageHeader("protocolo", 0, false, 0, 0), 
+							new MessageHeader("protocolo", 0, false, UtilsConf.COD_SUCESSO, 0), 
 							new MessageBody(null, null, new ReplyHeader("", 0, 0), 
 									new ReplyBody(ter.getResult())));
 
@@ -110,7 +115,7 @@ public class CalculatorInvoker {
 					ter.setResult(rObj.div(_div_p1, _div_p2));
 
 					Message _div_msgToBeMarshalled = new Message(
-							new MessageHeader("protocolo", 0, false, 0, 0), 
+							new MessageHeader("protocolo", 0, false, UtilsConf.COD_SUCESSO, 0), 
 							new MessageBody(null, null, new ReplyHeader("", 0, 0), 
 									new ReplyBody(ter.getResult())));
 
@@ -128,7 +133,7 @@ public class CalculatorInvoker {
 					ter.setResult(rObj.mul(_mul_p1, _mul_p2));
 
 					Message _mul_msgToBeMarshalled = new Message(
-							new MessageHeader("protocolo", 0, false, 0, 0), 
+							new MessageHeader("protocolo", 0, false, UtilsConf.COD_SUCESSO, 0), 
 							new MessageBody(null, null, new ReplyHeader("", 0, 0), 
 									new ReplyBody(ter.getResult())));
 
